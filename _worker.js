@@ -102,3 +102,21 @@ async function ADD(envadd) {
 	//console.log(add);
 	return add ;
 }
+
+addEventListener('fetch', event => {
+  const request = event.request;
+
+  // 获取请求头中的 User-Agent
+  const userAgent = request.headers.get('User-Agent');
+
+  // 检查 User-Agent 是否为 Surge iOS/3367
+  if (!userAgent || !userAgent.includes('Surge iOS/3367')) {
+    // 如果不是 Surge iOS/3367，则返回 403 Forbidden
+    return event.respondWith(
+      new Response('Forbidden', { status: 403 })
+    );
+  }
+
+  // 如果 User-Agent 匹配 Surge iOS/3367，则继续处理请求
+  return event.respondWith(fetch(request));
+});
